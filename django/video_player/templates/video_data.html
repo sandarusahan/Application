@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head> </head>
+  <body>
+    
+  </body>
+
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      const framesContainer = document.getElementById("full_frames");
+      const faceframesContainer = document.getElementById("face_frames");
+      // Event listener for the scroll event on the frames container
+      framesContainer.addEventListener("scroll", function () {
+      console.log("jsjsjs");
+
+        // Apply the same scroll position to the faceframes container
+        faceframesContainer.scrollLeft =
+          framesContainer.scrollLeft /
+          (framesContainer.scrollWidth / faceframesContainer.scrollWidth);
+      });
+
+      framesContainer.scroll;
+    });
+  </script>
+</html>

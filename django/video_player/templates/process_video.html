@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Process Video</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .container {
+        max-width: 800px;
+      }
+
+      .image-container {
+        display: flex;
+        overflow-x: scroll;
+        white-space: nowrap;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        height: auto;
+        margin-right: 1px;
+      }
+
+      #face_frames {
+        overflow: hidden;
+        margin-bottom: 100px;
+      }
+
+      #face_frames img {
+        max-width: 100%;
+        height: 100px;
+        margin-right: 3px;
+      }
+
+      #predict_btn {
+        max-width: fit-content;
+      }
+
+      #prediction {
+        font-size: 1.5rem;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="//video/new">Video Upload</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#database">Database</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#detector">Detect</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="vid_details" class="container">
+      <div class="video_metadata">
+        <h2>Video Metadata</h2>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">Video Name</th>
+              <td id="vid_name">{{ vid_name }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Video FPS</th>
+              <td id="vid_fps">{{ fps }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Total frames count</th>
+              <td id="vid_total_frames">{{ total_frames }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Captured face frames count</th>
+              <td id="vid_frames_captured">{{ captured_face_frames }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="frames_container">
+        <div class="image-container" id="full_frames">
+          {% for frame in frames %}
+          <img src="data:image/jpg;base64, {{ frame }}" alt="Image" />
+          {% endfor %}
+        </div>
+        <div class="image-container" id="face_frames">
+          {% for faceframe in faceframes %}
+          <img src="data:image/jpg;base64, {{ faceframe }}" alt="Image" />
+          {% endfor %}
+        </div>
+      </div>
+      <div class="action_panel">
+        <div class="row">
+          <div class="col">
+            <div class="search_db row">
+              <h5 class="col">Search the video in known video database</h5>
+              <button class="btn btn-outline-primary btn-sm" id="search_btn">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-search"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                  />
+                </svg>
+              </button>
+              <div class="result_db">
+                <div
+                  class="spinner-grow text-primary"
+                  style="display: none"
+                  role="status"
+                  id="loading_icon"
+                ></div>
+                <span class="font-weight-bold" id="vid_db_results"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="predict_by_model row">
+              <h5 class="col">Predict by model</h5>
+              <button
+                class="btn btn-outline-primary btn-sm col"
+                id="predict_btn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-clockwise"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+                  />
+                  <path
+                    d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
+                  />
+                </svg>
+              </button>
+              <div class="result-panel text-center">
+                <div
+                  class="spinner-grow text-primary"
+                  style="display: none"
+                  role="status"
+                  id="loading_icon"
+                ></div>
+                <span class="font-weight-bold" id="prediction"></span>
+              </div>
+
+              <!-- <pre id="preee"></pre> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      const framesContainer = document.getElementById("full_frames");
+      const faceframesContainer = document.getElementById("face_frames");
+      const vidName = document.getElementById("vid_name");
+      const prediction = document.getElementById("prediction");
+      const loadingIcon = document.getElementById("loading_icon");
+
+      const predictBtn = document.getElementById("predict_btn");
+      const searchBtn = document.getElementById("search_btn");
+
+      // const preee = document.getElementById("preee");
+
+      // Event listener for process video
+      // const xhr = new XMLHttpRequest();
+      // xhr.open("GET", "../do_process-video/" + vidName.textContent + "/");
+      // xhr.send();
+
+      // xhr.onload = function () {
+      //   if (xhr.status != 200) {
+      //     alert(
+      //       `Error processing video !! ${xhr.status}: ${xhr.statusText}, ${xhr.responseURL}`
+      //     );
+      //   } else {
+      //     // document.getElementById("vid_fps").textContent = xhr.responseJson.fps;
+      //     alert(`Done, ${xhr.responseText}`);
+      //     document.getElementById("vid_details").insertAdjacentHTML =
+      //       xhr.responseText;
+      //   }
+      // };
+
+      // Event listener for the scroll event on the frames container
+      framesContainer.addEventListener("scroll", function () {
+        // Apply the same scroll position to the faceframes container
+        faceframesContainer.scrollLeft =
+          framesContainer.scrollLeft /
+          (framesContainer.scrollWidth / faceframesContainer.scrollWidth);
+      });
+
+      // Event listener for ajax call to call the predict function
+      predictBtn.addEventListener("click", function () {
+        loadingIcon.style.display = "inline-block";
+        prediction.textContent = "";
+        predictBtn.disabled = true;
+        predictBtn.style.color = "grey";
+        predictBtn.style.border = "1px solid grey";
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "../predict-video/" + vidName.textContent + "/");
+        xhr.setRequestHeader("total_frames", "{{ total_frames }}");
+        xhr.send();
+
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {
+            prediction.textContent = JSON.parse(xhr.responseText)["result"];
+            // preee.textContent =
+            //   JSON.parse(xhr.responseText)["prediction"] +
+            //   "\n" +
+            //   JSON.parse(xhr.responseText)["pred_mean"];
+
+            loadingIcon.style.display = "none";
+            predictBtn.style.color = "blue";
+            predictBtn.style.border = "1px solid blue";
+            predictBtn.disabled = false;
+          }
+        };
+      });
+
+      // Event listener for ajax call to search the video in the database
+      searchBtn.addEventListener("click", function () {
+        loadingIcon.style.display = "inline-block";
+        vid_db_results.textContent = "";
+        searchBtn.disabled = true;
+        searchBtn.style.color = "grey";
+        searchBtn.style.border = "1px solid grey";
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "../search-video/" + vidName.textContent + "/");
+        xhr.send();
+
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+          } else {
+            vid_db_results.textContent = JSON.parse(xhr.responseText)['vid_results'].join(", ");
+            loadingIcon.style.display = "none";
+            searchBtn.style.color = "blue";
+            searchBtn.style.border = "1px solid blue";
+            searchBtn.disabled = false;
+          }
+        };
+      });
+
+      window.addEventListener("load", function () {
+        setTimeout(predictBtn.click(), 5000);
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Video Upload</title>
+    <!-- Add Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      /* Set the max-width and max-height of the video player container */
+      .video-container {
+        position: relative;
+        max-width: 80%;
+        margin: 0 auto; /* Center the video player */
+        overflow: hidden;
+      }
+
+      /* Style for the close button overlay */
+      .overlay-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1; /* Ensure the button appears above the video */
+      }
+
+      .container {
+        max-width: 800px;
+      }
+      /* Style for the proceed button */
+      #proceed-btn {
+        width: 80%;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#home">Video Upload</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#database">Database</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#detector">Detect</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <span hidden id="file-path">{{ video_url }}</span>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <input
+            type="file"
+            class="form-control"
+            id="video_file"
+            name="video_file"
+            accept=".mp4,.avi,.mkv,.mov"
+            onchange="document.getElementById('file-text').textContent = this.files.length > 0 ? this.files[0].name : 'Select a file'"
+          />
+          <button class="btn btn-primary" type="submit">Upload Video</button>
+        </div>
+        <div id="error-message" class="text-danger"></div>
+      </form>
+
+      {% if video_url %}
+      <div class="embed-responsive embed-responsive-16by9 video-container">
+        <video
+          class="embed-responsive-item"
+          controls
+          style="max-width: 100%; max-height: 100%"
+        >
+          <source src="{{ video_url }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button class="btn btn-danger mt-2 overlay-button" id="close-btn">
+          Close
+        </button>
+      </div>
+
+      <div class="text-center mt-3">
+        <a class="btn btn-success" id="proceed-btn">Proceed</a>
+      </div>
+      {% endif %}
+    </div>
+    <!-- Add Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const closeBtn = document.getElementById("close-btn");
+        const uploadBtn = document.querySelector("button[type='submit']");
+        const videoFileInput = document.getElementById("video_file");
+        const errorMessage = document.getElementById("error-message");
+        const proceedBtn = document.getElementById("proceed-btn");
+        const video_url = document.getElementById("file-path").textContent;
+
+        // Event listener for the upload button
+        uploadBtn.addEventListener("click", function (event) {
+          console.log(video_url);
+          console.log("sldjfnlsk");
+
+          if (!videoFileInput.value) {
+            event.preventDefault(); // Prevent form submission
+            errorMessage.textContent = "Please select a video to upload."; // Show error message
+          } else {
+            errorMessage.textContent = ""; // Clear error message if video is selected
+          }
+        });
+
+        // Event listener for the close button
+        closeBtn.addEventListener("click", function () {
+          // Hide the video player container
+          const videoContainer = document.querySelector(".embed-responsive");
+          videoContainer.remove();
+          proceedBtn.remove();
+        });
+
+        proceedBtn.addEventListener("click", function () {
+          // Redirect to the process video page
+          console.log(video_url);
+          window.location.href = "../process-video/?video_url=" + video_url;
+        });
+      });
+    </script>
+  </body>
+</html>

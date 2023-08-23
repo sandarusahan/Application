@@ -1,0 +1,175 @@
+[
+  {
+    "vid_id": 1,
+    "vid_name": "id0_id1_0001",
+    "vid_hash": ["c71ed313fa307e80", "c71ed313fa307e80", "a8177a02557e2d8f"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id1_0001.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 2,
+    "vid_name": "id0_id1_0002",
+    "vid_hash": ["c0df5f87c0783827"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id1_0002.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 3,
+    "vid_name": "id0_id1_0003",
+    "vid_hash": ["de1d5b96c369281c", "dc1d5b97c369281c"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id1_0003.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 4,
+    "vid_name": "id0_id1_0007",
+    "vid_hash": ["d2940d86272b3f3b", "d28c0b828a3d3f3f"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id1_0007.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 5,
+    "vid_name": "id0_id1_0009",
+    "vid_hash": [
+      "859d5f96ca70683a",
+      "958d5f97ca746822",
+      "95cd5f979a3c2824",
+      "95cd5f979a3c2824"
+    ],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id1_0009.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 6,
+    "vid_name": "id0_id2_0003",
+    "vid_hash": [
+      "df1d4b97c36c2814",
+      "dd1d5b97c368281c",
+      "dd1d5b97c3692814",
+      "df1d0b97c36d2814"
+    ],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id2_0003.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 7,
+    "vid_name": "id0_id2_0004",
+    "vid_hash": [
+      "9dc75293d0257c47",
+      "9dc75392d8256c47",
+      "9dc75392d0257c47",
+      "9dc75293d0257c47",
+      "95c75493d22c78c7"
+    ],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id2_0004.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 8,
+    "vid_name": "id0_id2_0005",
+    "vid_hash": ["95845f97017c685f"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id2_0005.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 9,
+    "vid_name": "id0_id2_0008",
+    "vid_hash": [
+      "bb8056b701685dfa",
+      "bb8056f701680dfe",
+      "bb8056b701285ffa",
+      "bf8556fa17680dc0"
+    ],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id2_0008.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 10,
+    "vid_name": "id0_id3_0003",
+    "vid_hash": ["dc1d4b96cb6d281c", "dc1d5b96c36d281c", "dc1d5b96cb69281c"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id3_0003.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 11,
+    "vid_name": "id0_id3_0004",
+    "vid_hash": [
+      "9dc75293d02d6c47",
+      "9dc75392d02d6c47",
+      "9dc75292d02d6e47",
+      "918d4ed7c5283b96"
+    ],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id3_0004.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 12,
+    "vid_name": "id0_id3_0005",
+    "vid_hash": ["95845f97817c681f", "95c45ed2b83e6a26"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id3_0005.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 13,
+    "vid_name": "id0_id3_0008",
+    "vid_hash": ["bb8056b710684ffa", "bb8056b710682dfe", "bb8056b710286dfe"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id3_0008.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 14,
+    "vid_name": "id0_id3_0009",
+    "vid_hash": ["859d5e966a68783a", "95ce5fd79a3c2820", "95ce5fd79a3c2820"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id3_0009.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 15,
+    "vid_name": "id0_id4_0003",
+    "vid_hash": ["dc1d5b97c3696814", "dc1d5b97c36d2814", "dc1d5b97c36d2814"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id0_id4_0003.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 16,
+    "vid_name": "id1_id0_0007",
+    "vid_hash": ["954c5eb33b2c2d64", "954c5eb33b2c2d64"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id0_0007.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 17,
+    "vid_name": "id1_id0_0009",
+    "vid_hash": ["87fc1a938e2f3914", "9ffc1a934e2f3810"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id0_0009.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 18,
+    "vid_name": "id1_id2_0009",
+    "vid_hash": ["87fc1a930f2f3894", "87fc1a930f2d7894"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id2_0009.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 19,
+    "vid_name": "id1_id4_0007",
+    "vid_hash": ["954c7eb3392c2d64"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id4_0007.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 20,
+    "vid_name": "id1_id6_0002",
+    "vid_hash": ["c0890be6af383fa3", "c2890ba6af383fb2"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id6_0002.mp4",
+    "vid_label": "Fake_Sample"
+  },
+  {
+    "vid_id": 21,
+    "vid_name": "id1_id9_0002",
+    "vid_hash": ["c0890ba68f393fab", "c0890fa68f383fab"],
+    "vid_path": "D:\\MSc\\OneDrive - MMU\\Documents\\MSc\\Dissertation\\Application\\CNN-LSTM-Model\\Output\\Fake_Sample\\id1_id9_0002.mp4",
+    "vid_label": "Fake_Sample"
+  }
+]
