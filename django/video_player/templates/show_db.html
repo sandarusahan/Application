@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Show Database</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .container {
+        max-width: 90%;
+        padding: 10px;
+      }
+
+      video {
+        max-width: 50%;
+        max-height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">Video Database</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/show-db">Database</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="vid-list" class="container">
+      <h1 class="text-center p-3">Known Videos Database</h5>
+      <div class="row">
+        <div class="col">
+          <h3>Known Deepfakes</h3>
+          <ul class="list-group">
+            {% for vid in result %} {% if vid.vid_label == "0" %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <a href="{{vid.vid_id}}">{{vid.vid_name}}</a>
+              <video class="embed-responsive-item" controls>
+                <source src="{{ vid.vid_path }}" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
+        </div>
+        <div class="col">
+          <h3>Known Real Videos</h3>
+          <ul class="list-group">
+            {% for vid in result %} {% if vid.vid_label == "1" %}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+            <a href="{{vid.vid_id}}">{{vid.vid_name}}</a>
+              <video class="embed-responsive-item" controls>
+                <source src="{{ vid.vid_path }}" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </li>
+            {% endif %} {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <span>{{message}}</span>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</html>

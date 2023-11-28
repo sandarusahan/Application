@@ -10,7 +10,7 @@
     />
     <style>
       .container {
-        max-width: 800px;
+        max-width: 90%;
       }
 
       .image-container {
@@ -25,9 +25,18 @@
         margin-right: 1px;
       }
 
+      .right-panel {
+        background-color: rgba(211, 211, 211, 0.527);
+        border-radius: 10px;
+        margin: 5px;
+      }
+
+      .table {
+        background-color: rgba(211, 211, 211, 0.014);
+      }
       #face_frames {
         overflow: hidden;
-        margin-bottom: 100px;
+        margin-bottom: 10px;
       }
 
       #face_frames img {
@@ -36,20 +45,31 @@
         margin-right: 3px;
       }
 
+      #search_btn,
       #predict_btn {
         max-width: fit-content;
+        max-height: fit-content;
       }
 
-      #prediction {
+      #final_prediction {
         font-size: 1.5rem;
         color: red;
       }
+
+      #predictions {
+        display: none;
+      }
+
+      .video_metadata {
+        max-height: 300px;
+      }
     </style>
   </head>
+
   <body>
     <div class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <a class="navbar-brand" href="//video/new">Video Upload</a>
+        <a class="navbar-brand" href="/">Video Upload</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -64,120 +84,169 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="#home">Home</a>
+              <a class="nav-link active" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#database">Database</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#detector">Detect</a>
+              <a class="nav-link" href="../show-db">Database</a>
             </li>
           </ul>
         </div>
       </div>
     </div>
-
-    <div id="vid_details" class="container">
-      <div class="video_metadata">
-        <h2>Video Metadata</h2>
-        <table class="table">
-          <tbody>
-            <tr>
-              <th scope="row">Video Name</th>
-              <td id="vid_name">{{ vid_name }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Video FPS</th>
-              <td id="vid_fps">{{ fps }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Total frames count</th>
-              <td id="vid_total_frames">{{ total_frames }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Captured face frames count</th>
-              <td id="vid_frames_captured">{{ captured_face_frames }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="frames_container">
-        <div class="image-container" id="full_frames">
-          {% for frame in frames %}
-          <img src="data:image/jpg;base64, {{ frame }}" alt="Image" />
-          {% endfor %}
-        </div>
-        <div class="image-container" id="face_frames">
-          {% for faceframe in faceframes %}
-          <img src="data:image/jpg;base64, {{ faceframe }}" alt="Image" />
-          {% endfor %}
-        </div>
-      </div>
-      <div class="action_panel">
-        <div class="row">
-          <div class="col">
-            <div class="search_db row">
-              <h5 class="col">Search the video in known video database</h5>
-              <button class="btn btn-outline-primary btn-sm" id="search_btn">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-search"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-                  />
-                </svg>
-              </button>
-              <div class="result_db">
-                <div
-                  class="spinner-grow text-primary"
-                  style="display: none"
-                  role="status"
-                  id="loading_icon"
-                ></div>
-                <span class="font-weight-bold" id="vid_db_results"></span>
-              </div>
+    <div class="container">
+      <h1 class="text-center p-5">Processing Video</h1>
+      <div id="vid_details" class="row">
+        <div class="col-7">
+          <div class="video_metadata">
+            <h5>Video Metadata</h5>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Video Name</th>
+                  <td id="vid_name">{{ vid_name }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Video FPS</th>
+                  <td id="vid_fps">{{ fps }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Total frames count</th>
+                  <td id="vid_total_frames">{{ total_frames }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Captured face frames count</th>
+                  <td id="vid_frames_captured">{{ captured_face_frames }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="frames_container">
+            <div class="image-container" id="full_frames">
+              {% for frame in frames %}
+              <img src="data:image/jpg;base64, {{ frame }}" alt="Image" />
+              {% endfor %}
+            </div>
+            <div class="image-container" id="face_frames">
+              {% for faceframe in faceframes %}
+              <img src="data:image/jpg;base64, {{ faceframe }}" alt="Image" />
+              {% endfor %}
             </div>
           </div>
-          <div class="col">
-            <div class="predict_by_model row">
-              <h5 class="col">Predict by model</h5>
-              <button
-                class="btn btn-outline-primary btn-sm col"
-                id="predict_btn"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-arrow-clockwise"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
-                  />
-                  <path
-                    d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
-                  />
-                </svg>
-              </button>
-              <div class="result-panel text-center">
-                <div
-                  class="spinner-grow text-primary"
-                  style="display: none"
-                  role="status"
-                  id="loading_icon"
-                ></div>
-                <span class="font-weight-bold" id="prediction"></span>
+        </div>
+        <div class="col-5">
+          <div class="right-panel">
+            <div class="btn-panel p-2">
+              <h6>Save the video in database as,</h6>
+              <div class="row">
+                <div class="col text-center">
+                  <button class="btn btn-outline-success btn-lg" id="btn_prest">
+                    Prestine
+                  </button>
+                </div>
+                <div class="col text-center">
+                  <button class="btn btn-outline-danger btn-lg" id="btn_deepf">
+                    Deepfake
+                  </button>
+                </div>
               </div>
-
-              <!-- <pre id="preee"></pre> -->
+            </div>
+            <div class="action_panel p-4">
+              <div>
+                <div>
+                  <div class="search_db row">
+                    <h5 class="col">
+                      Search the video in known video database
+                    </h5>
+                    <button class="btn btn-outline-primary col" id="search_btn">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-search"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                        />
+                      </svg>
+                    </button>
+                    <div class="result_db text-center">
+                      <div
+                        class="spinner-grow text-primary"
+                        style="display: none"
+                        role="status"
+                        id="loading_icon1"
+                      ></div>
+                      <h6 id="vid_db_msg"></h6>
+                      <ul
+                        class="list-group font-weight-bold"
+                        id="vid_db_results"
+                      ></ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="predict_by_model row">
+                    <h5 class="col">Overall Prediction</h5>
+                    <button
+                      class="btn btn-outline-primary col"
+                      id="predict_btn"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-arrow-clockwise"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+                        />
+                        <path
+                          d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
+                        />
+                      </svg>
+                    </button>
+                    <div class="result-panel text-center">
+                      <div
+                        class="spinner-grow text-primary"
+                        style="display: none"
+                        role="status"
+                        id="loading_icon2"
+                      ></div>
+                      <h4 class="font-weight-bold" id="final_prediction"></h4>
+                      <div id="predictions">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Prediction Mean</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">Xception</th>
+                              <td id="xcept">*</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">VGG16</th>
+                              <td id="vgg16">*</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">MesoNet</th>
+                              <td id="meso">*</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <h6 id="avg_pred"></h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -193,13 +262,22 @@
       const framesContainer = document.getElementById("full_frames");
       const faceframesContainer = document.getElementById("face_frames");
       const vidName = document.getElementById("vid_name");
-      const prediction = document.getElementById("prediction");
-      const loadingIcon = document.getElementById("loading_icon");
+      const final_prediction = document.getElementById("final_prediction");
+      const loadingIcon1 = document.getElementById("loading_icon1");
+      const loadingIcon2 = document.getElementById("loading_icon2");
+      const vid_db_results = document.getElementById("vid_db_results");
+      const vid_db_msg = document.getElementById("vid_db_msg");
 
       const predictBtn = document.getElementById("predict_btn");
       const searchBtn = document.getElementById("search_btn");
+      const btn_prest = document.getElementById("btn_prest");
+      const btn_deepf = document.getElementById("btn_deepf");
 
-      // const preee = document.getElementById("preee");
+      const predictions = document.getElementById("predictions");
+      const xcept = document.getElementById("xcept");
+      const vgg16 = document.getElementById("vgg16");
+      const meso = document.getElementById("meso");
+      const avg_pred = document.getElementById("avg_pred");
 
       // Event listener for process video
       // const xhr = new XMLHttpRequest();
@@ -229,11 +307,10 @@
 
       // Event listener for ajax call to call the predict function
       predictBtn.addEventListener("click", function () {
-        loadingIcon.style.display = "inline-block";
-        prediction.textContent = "";
-        predictBtn.disabled = true;
-        predictBtn.style.color = "grey";
-        predictBtn.style.border = "1px solid grey";
+        loadingIcon2.style.display = "inline-block";
+        predictions.style.display = "none";
+        final_prediction.textContent = "";
+        predictBtn.style.display = "none";
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "../predict-video/" + vidName.textContent + "/");
         xhr.setRequestHeader("total_frames", "{{ total_frames }}");
@@ -242,16 +319,24 @@
         xhr.onload = function () {
           if (xhr.status != 200) {
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
+            loadingIcon2.style.display = "none";
+            predictBtn.style.display = "inline-block";
+            predictBtn.disabled = false;
           } else {
-            prediction.textContent = JSON.parse(xhr.responseText)["result"];
-            // preee.textContent =
-            //   JSON.parse(xhr.responseText)["prediction"] +
-            //   "\n" +
-            //   JSON.parse(xhr.responseText)["pred_mean"];
+            final_prediction.textContent = JSON.parse(xhr.responseText)[
+              "result"
+            ];
+            xcept.textContent = JSON.parse(xhr.responseText)["predictions"][0];
+            vgg16.textContent = JSON.parse(xhr.responseText)["predictions"][1];
+            meso.textContent = JSON.parse(xhr.responseText)["predictions"][2];
 
-            loadingIcon.style.display = "none";
-            predictBtn.style.color = "blue";
-            predictBtn.style.border = "1px solid blue";
+            avg_pred.textContent =
+              "Average Prediction: " +
+              JSON.parse(xhr.responseText)["pred_mean"];
+
+            loadingIcon2.style.display = "none";
+            predictBtn.style.display = "inline-block";
+            predictions.style.display = "block";
             predictBtn.disabled = false;
           }
         };
@@ -259,30 +344,85 @@
 
       // Event listener for ajax call to search the video in the database
       searchBtn.addEventListener("click", function () {
-        loadingIcon.style.display = "inline-block";
+        loadingIcon1.style.display = "inline-block";
         vid_db_results.textContent = "";
         searchBtn.disabled = true;
-        searchBtn.style.color = "grey";
-        searchBtn.style.border = "1px solid grey";
+        searchBtn.style.display = "none";
         const xhr = new XMLHttpRequest();
-        xhr.open("GET", "../search-video/" + vidName.textContent + "/");
+        xhr.open("GET", "../search-db/" + vidName.textContent + "/");
         xhr.send();
 
         xhr.onload = function () {
           if (xhr.status != 200) {
             alert(`Error ${xhr.status}: ${xhr.statusText}`);
-          } else {
-            vid_db_results.textContent = JSON.parse(xhr.responseText)['vid_results'].join(", ");
-            loadingIcon.style.display = "none";
-            searchBtn.style.color = "blue";
-            searchBtn.style.border = "1px solid blue";
+            loadingIcon1.style.display = "none";
+            searchBtn.style.display = "inline-block";
             searchBtn.disabled = false;
+          } else {
+            result = JSON.parse(xhr.responseText)["result"];
+            result = JSON.parse(result);
+            for (var key in result) {
+              var elem = document.createElement("li");
+              elem.className = "list-group-item";
+              elem.style.display = "inline-block";
+              var aelem = document.createElement("a");
+              aelem.textContent = result[key]["vid_name"];
+              aelem.href = "../show-db/" + result[key]["vid_id"];
+              elem.appendChild(aelem);
+              console.log(result);
+              vid_db_results.appendChild(elem);
+            }
+            vid_db_msg.textContent = JSON.parse(xhr.responseText)["message"];
+            loadingIcon1.style.display = "none";
+            searchBtn.style.display = "inline-block";
+            searchBtn.disabled = false;
+          }
+        };
+      });
+
+      // Event listener for ajax call to save the video in the database
+      // keep buttons disabled after video is added to database
+      btn_prest.addEventListener("click", function () {
+        btn_prest.disabled = true;
+        btn_deepf.disabled = true;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "../save-db/" + vidName.textContent + "/1/");
+        xhr.send();
+
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+            btn_prest.disabled = false;
+            btn_deepf.disabled = false;
+          } else {
+            btn_prest.disabled = false;
+            btn_deepf.disabled = false;
+          }
+        };
+      });
+
+      btn_deepf.addEventListener("click", function () {
+        btn_prest.disabled = true;
+        btn_deepf.disabled = true;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "../save-db/" + vidName.textContent + "/0/");
+        xhr.send();
+
+        xhr.onload = function () {
+          if (xhr.status != 200) {
+            alert(`Error ${xhr.status}: ${xhr.statusText}`);
+            btn_prest.disabled = false;
+            btn_deepf.disabled = false;
+          } else {
+            btn_prest.disabled = false;
+            btn_deepf.disabled = false;
           }
         };
       });
 
       window.addEventListener("load", function () {
         setTimeout(predictBtn.click(), 5000);
+        setTimeout(searchBtn.click(), 5000);
       });
     });
   </script>

@@ -14,18 +14,18 @@ def calculate_phash(vid_path, vid_res=(128,128)):
         return
     vid_len = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1
     frame_capture = [0, int(vid_len*0.25), int(vid_len*0.5), int(vid_len*0.75), vid_len]
-    for i in range(len(frame_capture)):
+    for i in range(vid_len): # vide_len
         ret, frame = cap.read()
         if not ret:
             break
         if i in frame_capture:
             frame = format_frame(frame, vid_res)
-            frames_hashes.append(phash(Image.fromarray(frame)).__str__())
+            frames_hashes.append(str(phash(Image.fromarray(frame))))
         
     return frames_hashes
 
 def format_frame(frame, output_size):
-    # geyscale image
+    # geyscale image, resize image
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = cv2.resize(frame, output_size)
     return frame
@@ -49,7 +49,7 @@ def create_metadata_json(directory_path):
                 vid_meta.vid_name = file.split('.')[0]
                 vid_meta.vid_path = os.path.join(root, file)
                 vid_meta.vid_hash = calculate_phash(vid_meta.vid_path)
-                vid_meta.vid_label = root.split('\\')[-1]
+                vid_meta.vid_label = '0' if "Fake" in root.split('\\')[-1] else '1'
                 vid_metadata_list.append(vid_meta)
                 
     print(len(vid_metadata_list))
@@ -82,21 +82,48 @@ def find_simillar_vids(video_path, acc_thresh=5):
 
     # Iterate through the dictionary and find the video with the same pHash
     for vid_meta in vid_metadata_dict:
-        found_vid_meta = VidMeta() 
+        # found_vid_meta = VidMeta() 
         for src_hash in list(vid_meta['vid_hash']):
             for tar_hash in list(video_hash): 
                 if hamming_distance(src_hash, tar_hash) <= acc_thresh:
-                    found_vid_meta.vid_id = vid_meta['vid_id']
-                    found_vid_meta.vid_name = vid_meta['vid_name']
-                    found_vid_meta.vid_hash = vid_meta['vid_hash']
-                    found_vid_meta.vid_path = vid_meta['vid_path']
-                    found_vid_meta.vid_label = vid_meta['vid_label']
-                    if(found_vid_meta.vid_id not in [r.vid_id for r in results]):
-                        results.append(found_vid_meta)
+                    
+
+                    # if(found_vid_meta.vid_id not in [r.vid_id for r in results]):
+                    if(vid_meta['vid_id'] not in [r['vid_id'] for r in results]):
+
+                    # vid_name = vid_meta['vid_name']
+                        # found_vid_meta = found_vid_meta.__dict__
+                        # vid_meta_json = json.dumps(found_vid_meta)
+                        results.append(vid_meta)
                 
 
     return results
-   
+
+def add_video_to_meta_json(vid_path, vid_label):
+    vid_metadata_path = 'D:\MSc\OneDrive - MMU\Documents\MSc\Dissertation\Application\CNN-LSTM-Model\known_videos\metadata.json'
+    with open (vid_metadata_path, 'r') as f:
+        vid_metadata_dict = json.loads(f.read())
+    
+    vid_meta = VidMeta()
+    vid_meta.vid_id = len(vid_metadata_dict) + 1
+    vid_meta.vid_name = vid_path.split('/')[-1]
+    vid_meta.vid_path = "/"+vid_path
+    vid_meta.vid_hash = calculate_phash(vid_path)
+    vid_meta.vid_label = vid_label
+
+    vid_metadata_dict.append(vid_meta.__dict__)
+    # Write the metadata to a JSON file
+    with open('D:\MSc\OneDrive - MMU\Documents\MSc\Dissertation\Application\CNN-LSTM-Model\known_videos\metadata.json', 'w') as f:
+        json.dump(vid_metadata_dict, f, 
+                        indent=4,  
+                        separators=(',',': '))   
+    
+def get_all_videos_from_meta_json():
+    vid_metadata_path = 'D:\MSc\OneDrive - MMU\Documents\MSc\Dissertation\Application\CNN-LSTM-Model\known_videos\metadata.json'
+    with open (vid_metadata_path, 'r') as f:
+        vid_metadata_dict = json.loads(f.read())
+    return vid_metadata_dict
+
 class VidMeta:
     def __init__(self, vid_id, vid_name, vid_hash, vid_path, vid_label):
         self.vid_id = vid_id
